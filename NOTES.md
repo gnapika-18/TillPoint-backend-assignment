@@ -24,15 +24,15 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 > Products show as sold out, or nearly, while the shelf is full. Staff say it gets worse on days when many customers abandon checkout.
 
-**Status:** TODO: fill in
+**Status:** TODO: Partly Fixed
 
-**What I saw:** TODO: fill in
+**What I saw:** TODO: Product Stock was reduced when an order was created, even before payment. When a pending order or cancelling the order was cancelled, the reserved stock was not returned. Abandoned orders  are keep stock unavailable.
 
-**Root cause:** TODO: fill in
+**Root cause:** TODO: Stock was reserved only for order creation,logic went wrong during cancellation logic restored for paid orders. Pending orders were ignored.
 
-**Fix and why:** TODO: fill in
+**Fix and why:** TODO: I updated the cancellation logic to restore stock for both pending and paid orders. This can make that after unapid and order cancelled can stock restored.
 
-**How I verified it:** TODO: fill in
+**How I verified it:** TODO: Added a new test named test_cancel_pending_order_restocks. It verifies that stock returns to its original quantity after cancelling a pending order. Ran the complete test suite, and all tests passed.
 
 **Commits:** 
 
