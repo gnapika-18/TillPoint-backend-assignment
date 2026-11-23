@@ -1,4 +1,8 @@
 # Exporting AI session logs.#
+
+This is a Chat Link : https://chatgpt.com/share/6b03b317-e1c0-83ee-af19-f3503ea37a3b 
+
+
 Gnapika, this is the `reserve()` method from your `catalog.py` file.
 
 Let's understand what it does.
