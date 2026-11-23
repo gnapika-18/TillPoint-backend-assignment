@@ -18,7 +18,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** TODO: I added a new test named 'test_duplicate_payment_webhook'. It sends the same successful payment event twice and verifies that the payment amount counted only once. I ran the automated tests to check the Changes.
 
-**Commits:** TODO: fill in
+**Commits:** TODO: TODO: 67ce727 (HEAD -> main, origin/main) Fix duplicate payment webhook processing with test case
 
 ## 2. Report
 
@@ -34,7 +34,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** TODO: fill in
 
-**Commits:** TODO: fill in
+**Commits:** 
 
 ## 3. Report
 

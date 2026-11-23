@@ -5,6 +5,7 @@ from tillpoint import db, reports
 from tillpoint.api import App
 from tillpoint.catalog import OutOfStock
 from tillpoint.payments import Payments
+from tillpoint.orders import OrderError
 
 
 class OrderDeskTest(unittest.TestCase):
@@ -80,7 +81,14 @@ class OrderDeskTest(unittest.TestCase):
             1200
         )
 
+    def test_cancel_pending_order_restocks(self):
+        order = self.app.orders.create("ana", [("MUG", 1)])
 
+        self.assertEqual(self.app.catalog.get_product("MUG").stock, 9)
+
+        self.app.orders.cancel(order["id"])
+
+        self.assertEqual(self.app.catalog.get_product("MUG").stock, 10)
 
 
 
