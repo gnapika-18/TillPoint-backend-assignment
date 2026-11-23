@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS order_items (
 CREATE TABLE IF NOT EXISTS payments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     order_id INTEGER NOT NULL REFERENCES orders(id),
-    event_id TEXT NOT NULL,
+    event_id TEXT NOT NULL UNIQUE,
     amount_cents INTEGER NOT NULL,
     received_at TEXT NOT NULL
 );
