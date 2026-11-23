@@ -98,13 +98,13 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** TODO:  Added test_separate_second_payment_rejected to verify that a second separate payment after full payment is rejected and the recorded payment total remains unchanged. Successful
 
-**Commits:** TODO: fill in
+**Commits:** TODO: 614656e (HEAD -> main, origin/main) Reject payments exceeding order balance
 
 ## Other things I noticed
 
 Problems outside the reports: what, where, and whether you fixed them. Write `none` if there were none.
 
-TODO: fill in
+TODO: A separate refund or payment reconciliation process is needed when a customer is charged twice for the same order. The current implementation rejects the second payment from being recorded in the system, but it does not automatically refund money already collected by the payment provider. This remains an improvement for future implementation.
 
 ## Session logs
 
