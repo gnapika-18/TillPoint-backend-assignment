@@ -14,6 +14,7 @@ def reserve(self, sku, qty):
 ```
 
 - `sku`: Product ID.
+
 - `qty`: Number of units the customer wants to purchase.
 
 ```
