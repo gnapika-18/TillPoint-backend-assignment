@@ -34,21 +34,21 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** TODO: Added a new test named test_cancel_pending_order_restocks. It verifies that stock returns to its original quantity after cancelling a pending order. Ran the complete test suite, and all tests passed.
 
-**Commits:** 
+**Commits:** 8161e4c (HEAD -> main, origin/main) Restore stock when pending orders are cancelled
 
 ## 3. Report
 
 > Customers in taxed regions who used a coupon say the tax on their receipt is too high. Receipts without a coupon are right.
 
-**Status:** TODO: fill in
+**Status:** TODO: Fixed 
 
-**What I saw:** TODO: fill in
+**What I saw:** TODO: Customers in taxed regions were charged too much tax when they used a coupon. Orders without coupouns had the correct tax.
 
-**Root cause:** TODO: fill in
+**Root cause:** TODO: Tax was calculated on the original subtotal before deducting the coupon discount.
 
-**Fix and why:** TODO: fill in
+**Fix and why:** TODO: Updated price_order() to calculate the coupon discount first then calculate tax on the discounted subtotal.This is the  customers are charged tax on the correct amount.
 
-**How I verified it:** TODO: fill in
+**How I verified it:** TODO: Added test_coupon_tax_calculated_after_discount that  checks the subtotal, discount,tax,and final total for a coupon order in California.Ran the complete test suite successfully.
 
 **Commits:** TODO: fill in
 

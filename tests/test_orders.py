@@ -59,9 +59,9 @@ class OrderDeskTest(unittest.TestCase):
         self.assertEqual(self.app.catalog.get_product("MUG").price_cents, 1500)
 
 
-    "Additionally, I have added a new test case to check for duplicate payment webhooks. "
-    "This test ensures that if the same payment event is received multiple times, "
-    "it does not result in double counting of the payment amount."
+    # "Additionally, I have added a new test case to check for duplicate payment webhooks. "
+    # "This test ensures that if the same payment event is received multiple times, "
+    # "it does not result in double counting of the payment amount."
 
     def test_duplicate_payment_webhook(self):
         order = self.app.orders.create("ana", [("MUG", 1)])
@@ -81,6 +81,9 @@ class OrderDeskTest(unittest.TestCase):
             1200
         )
 
+    # 'I added a new test case to verify that cancelling a pending order correctly restocks the items. 
+    # This test ensures that when an order is cancelled, the stock of the items 'in' that order 'is' restored to its original quantity.'
+
     def test_cancel_pending_order_restocks(self):
         order = self.app.orders.create("ana", [("MUG", 1)])
 
@@ -90,7 +93,20 @@ class OrderDeskTest(unittest.TestCase):
 
         self.assertEqual(self.app.catalog.get_product("MUG").stock, 10)
 
+    # I added a new test case to verify that the coupon discount is applied before calculating the tax. This test ensures that the tax is calculated on the discounted subtotal, not the original subtotal.
 
+    def test_coupon_tax_calculated_after_discount(self):
+        order = self.app.orders.create(
+            "ana",
+            [("MUG", 1)],
+            region="CA",
+            coupon_code="TEN"
+    )
+
+        self.assertEqual(order["subtotal_cents"], 1200)
+        self.assertEqual(order["discount_cents"], 120)
+        self.assertEqual(order["tax_cents"], 78)
+        self.assertEqual(order["total_cents"], 1158)
 
 
 if __name__ == "__main__":

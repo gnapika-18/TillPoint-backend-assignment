@@ -43,9 +43,11 @@ def price_order(lines, region, coupon=None):
     sub = subtotal(lines)
     tax = tax_for(sub, region)
     discount = discount_for(coupon, sub)
+    taxable_amount = sub - discount
+    tax = tax_for(taxable_amount, region)
     return {
         "subtotal_cents": sub,
         "discount_cents": discount,
         "tax_cents": tax,
-        "total_cents": sub - discount + tax,
+        "total_cents": taxable_amount + tax,
     }
