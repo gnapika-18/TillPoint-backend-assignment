@@ -66,21 +66,21 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** TODO:Added test_daily_sales_india_timezone, that can checks that a sale at 1:00 AM UTC (6:30 AM in INDIA) appears in the March 10 report.Ran the complete test suite successfully.
 
-**Commits:** TODO: fill in
+**Commits:** TODO: cd563c3 (HEAD -> main, origin/main) Fix daily sales report timezone boundaries
 
 ## 5. Report
 
 > Ever since we started running two server workers, we have sold more units of an item than we had, and its stock went negative.
 
-**Status:** TODO: fill in
+**Status:** TODO: Fixed 
 
-**What I saw:** TODO: fill in
+**What I saw:** TODO: When the server workers handled stock reservations. Automatically, they could both reserve the same available stock, causing stock become negative.
 
-**Root cause:** TODO: fill in
+**Root cause:** TODO: The reserve logic  checked stock using a per-process cache before updating the database different workers could read the same outdated stock value
 
-**Fix and why:** TODO: fill in
+**Fix and why:** TODO: Updated the stock reservation SQL to check "stock >= qty" and subtract the quantity in a single atomic database operation.This avoids reservations when insufficient stock remains.
 
-**How I verified it:** TODO: fill in
+**How I verified it:** TODO: I Added test_concurrent_stock_reservation, which uses two separate catalog instances with stale cached stock. It verifies that the second reservation fails and the remaining stock is correct.Run the complete test suite successfully
 
 **Commits:** TODO: fill in
 

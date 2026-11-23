@@ -136,5 +136,29 @@ class OrderDeskTest(unittest.TestCase):
             },
         )
 
+    # I added a new test case to verify that concurrent stock reservations 
+    # are handled correctly. This test ensures that when two catalog instances attempt to reserve stock for the same product at the same time,
+    #  the system correctly prevents over-reservation and maintains accurate stock levels.
+
+    def test_concurrent_stock_reservation(self):
+        first_catalog = self.app.catalog
+        second_catalog = type(first_catalog)(self.conn)
+
+        # Both catalog instances read the same initial stock.
+        first_catalog.get_product("TEE")
+        second_catalog.get_product("TEE")
+
+        first_catalog.reserve("TEE", 2)
+
+        # The second reservation must fail because only 1 remains.
+        with self.assertRaises(OutOfStock):
+            second_catalog.reserve("TEE", 2)
+
+        stock = self.conn.execute(
+            "SELECT stock FROM products WHERE sku = 'TEE'"
+        ).fetchone()["stock"]
+
+        self.assertEqual(stock, 1)
+
 if __name__ == "__main__":
     unittest.main()
