@@ -82,21 +82,21 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** TODO: I Added test_concurrent_stock_reservation, which uses two separate catalog instances with stale cached stock. It verifies that the second reservation fails and the remaining stock is correct.Run the complete test suite successfully
 
-**Commits:** TODO: fill in
+**Commits:** TODO: 0104775 (HEAD -> main, origin/main) Prevent overselling with atomic stock reservation
 
 ## 6. Open question
 
 > Open question from support, no single right answer: sometimes a customer really does pay twice for one order (two separate payments, not a retry of the same one). Today the system records both and says nothing. Decide what should happen, build the smallest version of your decision, and explain what it costs in `NOTES.md`.
 
-**My decision:** TODO: fill in
+**My decision:** TODO:An order should not accept payments beyond its total amount. Once fully paid, any separate successful payment for that order is rejected.
 
-**Why:** TODO: fill in
+**Why:** TODO:This avoids duplicate payments from being counted as additional revenue for the same order
 
-**What it costs:** TODO: fill in
+**What it costs:** TODO: If a customer pays twice, the second payment is rejected by our system, but the money already collected so, we need refund or reconciliation process would be needed.
 
-**What I built:** TODO: fill in
+**What I built:** TODO: Added a remaining-balance check before recording a payment. Partial payments are accepted,payments completing the order are accepted,and payments exceeding the remaining balance are rejected. Existing duplicate webhook event protection is preserved
 
-**How I verified it:** TODO: fill in
+**How I verified it:** TODO:  Added test_separate_second_payment_rejected to verify that a second separate payment after full payment is rejected and the recorded payment total remains unchanged. Successful
 
 **Commits:** TODO: fill in
 

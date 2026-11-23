@@ -6,6 +6,7 @@ from tillpoint.api import App
 from tillpoint.catalog import OutOfStock
 from tillpoint.payments import Payments
 from tillpoint.orders import OrderError
+from tillpoint.payments import PaymentError
 
 
 class OrderDeskTest(unittest.TestCase):
@@ -159,6 +160,37 @@ class OrderDeskTest(unittest.TestCase):
         ).fetchone()["stock"]
 
         self.assertEqual(stock, 1)
+
+    def test_separate_second_payment_rejected(self):
+        order = self.app.orders.create("ana", [("MUG", 1)])
+
+        first_payment = {
+            "id": "evt_first",
+            "type": "payment.succeeded",
+            "order_id": order["id"],
+            "amount_cents": 1200,
+        }
+
+        second_payment = {
+            "id": "evt_second",
+            "type": "payment.succeeded",
+            "order_id": order["id"],
+            "amount_cents": 1200,
+        }
+
+        self.app.payments.handle_event(first_payment)
+
+        with self.assertRaises(PaymentError):
+            self.app.payments.handle_event(second_payment)
+
+        self.assertEqual(self.app.payments.paid_cents(order["id"]), 1200)
+
+        count = self.conn.execute(
+            "SELECT COUNT(*) FROM payments WHERE order_id = ?",
+            (order["id"],)
+        ).fetchone()[0]
+
+        self.assertEqual(count, 1)
 
 if __name__ == "__main__":
     unittest.main()
