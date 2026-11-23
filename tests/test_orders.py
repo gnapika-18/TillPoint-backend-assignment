@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from tillpoint import db, reports
 from tillpoint.api import App
 from tillpoint.catalog import OutOfStock
+from tillpoint.payments import Payments
 
 
 class OrderDeskTest(unittest.TestCase):
@@ -55,6 +56,33 @@ class OrderDeskTest(unittest.TestCase):
     def test_price_change(self):
         self.app.handle("PUT", "/products/MUG", {"price_cents": 1500})
         self.assertEqual(self.app.catalog.get_product("MUG").price_cents, 1500)
+
+
+    "Additionally, I have added a new test case to check for duplicate payment webhooks. "
+    "This test ensures that if the same payment event is received multiple times, "
+    "it does not result in double counting of the payment amount."
+
+    def test_duplicate_payment_webhook(self):
+        order = self.app.orders.create("ana", [("MUG", 1)])
+
+        event = {
+            "id": "evt_duplicate",
+            "type": "payment.succeeded",
+            "order_id": order["id"],
+            "amount_cents": 1200,
+        }
+
+        self.app.payments.handle_event(event)
+        self.app.payments.handle_event(event)
+
+        self.assertEqual(
+            self.app.payments.paid_cents(order["id"]),
+            1200
+        )
+
+
+
+
 
 
 if __name__ == "__main__":

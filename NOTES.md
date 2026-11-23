@@ -8,15 +8,15 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 > Finance says that on some days the revenue in the daily report is higher than what the payment provider paid out, and a few orders show more money received than their total.
 
-**Status:** TODO: fill in
+**Status:** TODO: Fixed (after Duplicates webhook text cases Passed)
 
-**What I saw:** TODO: fill in
+**What I saw:** TODO: The same successful payment webhook could be received multiple times. Each delivery was inserted as a new payment record,which is increase the received amount for as order and make the daily revenue report higher than the actual amount received.
 
-**Root cause:** TODO: fill in
+**Root cause:** TODO: There is no UNIQUE for event_id so, the payment handler did not check whether a webhook event ID had already been processed. The database also allowed duplicate event ID's
 
-**Fix and why:** TODO: fill in
+**Fix and why:** TODO: I added a check to see whether the event ID already exists before inserting a payment. If the payment is already proccessed, handler returns without inserting it again. I also added UNIQUE constraint to the event_id to prevent duplicate records at the database level.
 
-**How I verified it:** TODO: fill in
+**How I verified it:** TODO: I added a new test named 'test_duplicate_payment_webhook'. It sends the same successful payment event twice and verifies that the payment amount counted only once. I ran the automated tests to check the Changes.
 
 **Commits:** TODO: fill in
 
