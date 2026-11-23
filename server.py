@@ -21,7 +21,7 @@ def make_handler(app):
             self.end_headers()
             self.wfile.write(data)
 
-        do_GET = do_POST = do_PUT = _serve
+        do_GET = do_POST = do_PUT = do_HEAD = _serve
     return Handler
 
 
@@ -29,5 +29,5 @@ if __name__ == "__main__":
     path = sys.argv[1] if len(sys.argv) > 1 else "tillpoint.db"
     port = int(sys.argv[2]) if len(sys.argv) > 2 else int(os.environ.get('PORT',8000))
 
-    HTTPServer(("127.0.0.1", port), 
+    HTTPServer(("0.0.0.0", port), 
     make_handler(App(db.connect(path)))).serve_forever()
