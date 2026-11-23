@@ -50,21 +50,21 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** TODO: Added test_coupon_tax_calculated_after_discount that  checks the subtotal, discount,tax,and final total for a coupon order in California.Ran the complete test suite successfully.
 
-**Commits:** TODO: fill in
+**Commits:** TODO: b86f3db (HEAD -> main, origin/main) Calculate tax after applying coupon discount
 
 ## 4. Report
 
 > Our shop in India (UTC+5:30) says sales taken in the morning do not appear in that day's report and turn up under the day before.
 
-**Status:** TODO: fill in
+**Status:** TODO:Fixed 
 
-**What I saw:** TODO: fill in
+**What I saw:** TODO: Sales made during the morning in INDIA appeared under the previous day's report instead of this correct local date.
 
-**Root cause:** TODO: fill in
+**Root cause:** TODO: The Utc offset is added instead of subtracted when the calculating the UTC boundaries of a local calender day.
 
-**Fix and why:** TODO: fill in
+**Fix and why:** TODO: Just i updated with exchanging of the sign + to - that means day_bounds_utc() to subtract the shop UTC offset when calculating the UTC start and end of the local day.This correctly Shows INDIA UTC+5:30 timezone.
 
-**How I verified it:** TODO: fill in
+**How I verified it:** TODO:Added test_daily_sales_india_timezone, that can checks that a sale at 1:00 AM UTC (6:30 AM in INDIA) appears in the March 10 report.Ran the complete test suite successfully.
 
 **Commits:** TODO: fill in
 

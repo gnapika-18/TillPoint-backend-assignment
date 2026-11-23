@@ -108,6 +108,33 @@ class OrderDeskTest(unittest.TestCase):
         self.assertEqual(order["tax_cents"], 78)
         self.assertEqual(order["total_cents"], 1158)
 
+    # I added a new test case to verify that the daily sales report correctly accounts
+    # for the shop's local timezone. This test ensures that sales made in different 
+    # timezones are accurately reflected in the daily sales report.
+
+    def test_daily_sales_india_timezone(self):
+        order = self.app.orders.create("ana", [("MUG", 1)])
+
+        morning_sale = datetime(2025, 3, 10, 1, 0, tzinfo=timezone.utc)
+
+        self.app.payments.handle_event(
+            {
+                "id": "evt_india",
+                "type": "payment.succeeded",
+                "order_id": order["id"],
+                "amount_cents": 1200,
+            },
+            now=morning_sale,
+    )
+
+        self.assertEqual(
+            reports.daily_sales(self.conn, "2025-03-10", utc_offset_minutes=330),
+            {
+                "day": "2025-03-10",
+                "revenue_cents": 1200,
+                "orders": 1,
+            },
+        )
 
 if __name__ == "__main__":
     unittest.main()
